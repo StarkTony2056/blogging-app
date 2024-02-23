@@ -2,6 +2,7 @@ import { Button, Spinner } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom"
+import CallToAction from "../components/CallToAction.jsx";
 
 export default function PostPage() {
   const {currentUser} = useSelector((state) => state.user);
@@ -51,11 +52,14 @@ export default function PostPage() {
       {/* fix post-content in index.css for the malfunctioning list elements */}
       <div className="p-3 max-w-2xl mx-auto w-full post-content" dangerouslySetInnerHTML={{__html: post && post.content}}></div>
       {currentUser.isAdmin &&
-        <div className="flex flex-col p-3 mx-auto max-w-3xl">
+        <div className="p-3 mx-auto">
           <Link to={`/update-post/${post._id}`}>
             <Button gradientDuoTone='purpleToPink'>Update</Button>
           </Link>
         </div>}
+        <div className="max-w-4xl mx-auto w-full">
+          <CallToAction />
+        </div>
     </main>
   )
 }
