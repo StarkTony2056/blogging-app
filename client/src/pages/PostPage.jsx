@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom"
 import CallToAction from "../components/CallToAction.jsx";
+import CommentSection from "../components/CommentSection.jsx";
 
 export default function PostPage() {
   const {currentUser} = useSelector((state) => state.user);
@@ -51,7 +52,7 @@ export default function PostPage() {
       </div>
       {/* fix post-content in index.css for the malfunctioning list elements */}
       <div className="p-3 max-w-2xl mx-auto w-full post-content" dangerouslySetInnerHTML={{__html: post && post.content}}></div>
-      {currentUser.isAdmin &&
+      {currentUser && currentUser.isAdmin &&
         <div className="p-3 mx-auto">
           <Link to={`/update-post/${post._id}`}>
             <Button gradientDuoTone='purpleToPink'>Update</Button>
@@ -60,6 +61,7 @@ export default function PostPage() {
         <div className="max-w-4xl mx-auto w-full">
           <CallToAction />
         </div>
+        <CommentSection postId={post._id} />
     </main>
   )
 }
