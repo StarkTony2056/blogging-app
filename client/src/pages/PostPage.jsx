@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom"
 import CallToAction from "../components/CallToAction.jsx";
 import CommentSection from "../components/CommentSection.jsx";
+import PostCard from "../components/PostCard.jsx";
 
 export default function PostPage() {
   const {currentUser} = useSelector((state) => state.user);
@@ -11,6 +12,7 @@ export default function PostPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [post, setPost] = useState(null);
+  const [recentPosts, setRecentPosts] = useState(null);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -34,13 +36,29 @@ export default function PostPage() {
     }
     fetchPost();
   }, [postSlug]);
+
+  useEffect(() => {
+    try {
+      const fetchRecentPosts = async () => {
+        const res = await fetch('/api/post/getposts?limit=3')
+        const data = await res.json();
+        if(res.ok) {
+          setRecentPosts(data.posts);
+        }
+      }
+      fetchRecentPosts();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [])
+
   if (loading) return(
     <div className="flex justify-center items-center min-h-screen">
       <Spinner size='xl' />
     </div>
   )
   return (
-    <main className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen">
+    <main className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen overflow-hidden">
       <h1 className="text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl">{post && post.title}</h1>
       <Link to={`/search?category=${post && post.category}`} className="self-center mt-5">
         <Button color="gray" pill size='xs'>{post && post.category}</Button>
@@ -62,6 +80,18 @@ export default function PostPage() {
           <CallToAction />
         </div>
         <CommentSection postId={post._id} />
+
+        <div className="flex flex-col justify-center items-center mb-5">
+          <h1 className="text-xl mt-5">Recent Articles</h1>
+          <div className="flex flex-wrap gap-5 mt-5 justify-center">
+            {
+              recentPosts &&
+              recentPosts.map((post) =>
+                <PostCard key={post._id} post={post} />
+              )
+            }
+          </div>
+        </div>
     </main>
   )
 }
