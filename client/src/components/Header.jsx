@@ -55,13 +55,15 @@ export default function Header() {
           Blog
       </Link>
       <form onSubmit={handleSubmit}>
-          <TextInput type='text' placeholder='Search...' rightIcon={AiOutlineSearch} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className='hidden lg:inline'/>
+        <TextInput type='text' placeholder='Search...' rightIcon={AiOutlineSearch} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className='hidden lg:inline'/>
       </form>
-      <Button className='w-12 h-10 lg:hidden' color='gray' pill>
-          <AiOutlineSearch />
-      </Button>
+      <Link to='/search?'>
+        <Button className='w-12 h-10 lg:hidden' color='gray' pill>
+            <AiOutlineSearch />
+        </Button>
+      </Link>
       <div className="flex gap-2 md:order-2">
-        <Button className='w-12 h-10 hidden sm:inline' color='gray' pill onClick={() => dispatch(toggleTheme())}>
+        <Button className='w-12 h-10 inline' color='gray' pill onClick={() => dispatch(toggleTheme())}>
           {theme === 'light' ? <FaMoon /> : <FaSun />}
         </Button>
         {currentUser ? (
